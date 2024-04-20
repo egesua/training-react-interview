@@ -5,7 +5,7 @@ function App() {
   const [counter, setCounter] = useState(0);
 
   return (
-    <div>
+    <div className="App">
       <h1>Hello egesua!</h1>
       <h2>This is your interview training area.</h2>
 
