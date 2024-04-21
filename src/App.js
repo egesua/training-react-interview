@@ -1,8 +1,21 @@
+import axios from "axios";
 import "./App.css";
 import { useState } from "react";
 
 function App() {
   const [counter, setCounter] = useState(0);
+
+  function getRandomUserData() {
+    axios
+      .get("https://randomuser.me/api")
+      .then((res) => {
+        console.log(res);
+        return res;
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }
 
   return (
     <div className="App">
@@ -26,6 +39,7 @@ function App() {
       >
         Decrease
       </button>
+      <button onClick={getRandomUserData}>Fetch Random User Data</button>
     </div>
   );
 }
