@@ -7,6 +7,7 @@ function App() {
   const [randomUserDataJSON, setRandomUserDataJSON] = useState("");
   const [userInfo, setUserInfo] = useState([]);
   const [randomUser, setRandomUser] = useState(null);
+
   const getFullUserName = (userInfo) => {
     const {
       name: { first, last },
@@ -14,14 +15,23 @@ function App() {
     return `${first} ${last}`;
   };
 
-  const getRandomuser = () => {
-    const randomIndex = Math.floor(Math.random() * userInfo.length);
-    setRandomUser(userInfo[randomIndex]);
+  const getRandomUser = () => {
+    axios
+      .get("https://randomuser.me/api")
+      .then(({ data }) => {
+        console.log(data);
+        const newRandomUser = data.results[0];
+        setUserInfo(prevUserInfo => [...prevUserInfo, newRandomUser]); //userInfo state'ine yeni bir user ekledik.
+        setRandomUser(newRandomUser);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
   useEffect(() => {
     axios
-      .get("https://randomuser.me/api")
+      .get("https://randomuser.me/api)")
       .then(({ data }) => {
         console.log(data);
         setRandomUserDataJSON(JSON.stringify(data));
@@ -55,14 +65,7 @@ function App() {
         Decrease
       </button>
 
-      <button onClick={getRandomuser}>Get Random User</button>
-
-      {randomUser && (
-        <div>
-          <p>{getFullUserName(randomUser)}</p>
-          <img src={randomUser.picture.thumbnail} alt="User Thumbnail" />
-        </div>
-      )}
+      <button onClick={getRandomUser}>Get Random User</button>
 
       {userInfo.map((userInfo, id) => (
         <div key={id}>
@@ -70,7 +73,6 @@ function App() {
           <img src={userInfo.picture.thumbnail} alt="userPicture" />
         </div>
       ))}
-
       <pre>{randomUserDataJSON}</pre>
     </div>
   );
