@@ -6,11 +6,17 @@ function App() {
   const [counter, setCounter] = useState(0);
   const [randomUserDataJSON, setRandomUserDataJSON] = useState("");
   const [userInfo, setUserInfo] = useState([]);
+  const [randomUser, setRandomUser] = useState(null);
   const getFullUserName = (userInfo) => {
     const {
       name: { first, last },
     } = userInfo;
     return `${first} ${last}`;
+  };
+
+  const getRandomuser = () => {
+    const randomIndex = Math.floor(Math.random() * userInfo.length);
+    setRandomUser(userInfo[randomIndex]);
   };
 
   useEffect(() => {
@@ -49,10 +55,19 @@ function App() {
         Decrease
       </button>
 
+      <button onClick={getRandomuser}>Get Random User</button>
+
+      {randomUser && (
+        <div>
+          <p>{getFullUserName(randomUser)}</p>
+          <img src={randomUser.picture.thumbnail} alt="User Thumbnail" />
+        </div>
+      )}
+
       {userInfo.map((userInfo, id) => (
         <div key={id}>
           <p>{getFullUserName(userInfo)}</p>
-          <img src={userInfo.picture.thumbnail} />
+          <img src={userInfo.picture.thumbnail} alt="userPicture" />
         </div>
       ))}
 
